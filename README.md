@@ -1,6 +1,6 @@
 # Ar-Watch
 
-Enhanced smart wristwatch with arduino working with Android phone.
+Enhanced smart wristwatch with arduino working with Android phone.<br />
 **Note: The clock parts are not joined.**
 
 ## Used materials
