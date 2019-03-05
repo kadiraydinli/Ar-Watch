@@ -13,7 +13,7 @@ Enhanced smart wristwatch with arduino working with Android phone.<br />
 - Adafruit_SSD1306-master [Adafruit_SSD1306-master](https://github.com/adafruit/Adafruit_SSD1306)
 - Adafruit-GFX-Library-master [Adafruit-GFX-Library-master](https://github.com/adafruit/Adafruit-GFX-Library)
 
-## How does the clock work?
+## How Does The Clock Work?
 - A bluetooth connection must be established from the Android application.
 - Clock information must be sent from the Android application.
 - The message and caller can be checked by opening and closing.
