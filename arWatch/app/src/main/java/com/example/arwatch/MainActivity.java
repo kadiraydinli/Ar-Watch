@@ -33,24 +33,21 @@ public class MainActivity extends AppCompatActivity {
     public BluetoothAdapter myBluetooth = null;
     public BluetoothSocket btSocket = null;
     public boolean isBtConnected = false;
-    static final UUID myUUID = UUID.fromString("8989063a-c9af-463a-b3f1-f21d9b2b827b");
+    static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        Intent newint = getIntent();
+        Intent blueAddress = getIntent();
 
-        address = newint.getStringExtra("kadir");
+        address = blueAddress.getStringExtra("blueAddress");
         btnWp = findViewById(R.id.btnWp);
         btnSms = findViewById(R.id.btnSms);
         btnArW = findViewById(R.id.btnAw);
         btnBt = findViewById(R.id.btnBt);
         btnBattery = findViewById(R.id.btnBattery);
         btnCall = findViewById(R.id.btnCall);
-
-        Toast.makeText(getApplicationContext(), "Adresim: " + address, Toast.LENGTH_SHORT).show();
 
         new BtConnect().execute();
 
@@ -162,35 +159,39 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private class BtConnect extends AsyncTask<Void,Void,Void> {
+    private class BtConnect extends AsyncTask<Void, Void, Void> {
         private boolean connectedSuccess = true;
         MainActivity main = new MainActivity();
+
         @Override
         protected void onPreExecute() {
             progress = ProgressDialog.show(MainActivity.this,"Bağlanıyor...","Lütfen bekleyiniz...");
         }
+
         @Override
         protected Void doInBackground(Void...devices) {
             try {
-                if (btSocket==null || !isBtConnected) {
+                if (btSocket == null || !isBtConnected) {
                     main.myBluetooth = BluetoothAdapter.getDefaultAdapter();
                     BluetoothDevice device = main.myBluetooth.getRemoteDevice(address);
                     main.btSocket = device.createInsecureRfcommSocketToServiceRecord(myUUID);
                     BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
                     main.btSocket.connect();
                 }
-            }catch (IOException e){
+            } catch (IOException e) {
+                e.printStackTrace();
                 connectedSuccess = false;
             }
             return null;
         }
+
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             if (!connectedSuccess) {
                 messages("Bağlantı hatası, lütfen tekrar deneyiniz.");
                 finish();
-            }else{
+            } else {
                 messages("Bağlantı başarılı.");
                 isBtConnected = true;
             }

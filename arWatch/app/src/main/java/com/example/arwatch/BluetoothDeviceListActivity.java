@@ -59,10 +59,10 @@ public class BluetoothDeviceListActivity extends AppCompatActivity {
     private AdapterView.OnItemClickListener selectDevice = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            //String info = ((TextView)view).getText().toString();
-            //String address = info.substring(info.length() - 17);
+            String info = ((TextView)view).getText().toString();
+            String address = info.substring(info.length() - 17);
             Intent returnMainActivity = new Intent(BluetoothDeviceListActivity.this, MainActivity.class);
-            returnMainActivity.putExtra("kadir", "yunus naber");
+            returnMainActivity.putExtra("blueAddress", address);
             startActivity(returnMainActivity);
         }
     };
