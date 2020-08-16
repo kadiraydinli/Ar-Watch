@@ -25,43 +25,50 @@ import java.util.Date;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
-    ImageView btnWp,btnSms,btnArW,btnBt,btnBattery,btnCall;
-    boolean wpEnable = false,batteryEnable = false,callEnable = false;
+    ImageView btnWp, btnSms, btnArW, btnBt, btnBattery, btnCall;
+    boolean wpEnable = false, batteryEnable = false, callEnable = false;
     public boolean smsEnable;
     String address = null;
     private ProgressDialog progress;
     public BluetoothAdapter myBluetooth = null;
     public BluetoothSocket btSocket = null;
     public boolean isBtConnected = false;
-    static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    static final UUID myUUID = UUID.fromString("8989063a-c9af-463a-b3f1-f21d9b2b827b");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         Intent newint = getIntent();
-        address = newint.getStringExtra(BluetoothDeviceListActivity.EXTRA_ADDRESS);
-        btnWp = (ImageView)findViewById(R.id.btnWp);
-        btnSms = (ImageView)findViewById(R.id.btnSms);
-        btnArW = (ImageView)findViewById(R.id.btnAw);
-        btnBt = (ImageView)findViewById(R.id.btnBt);
-        btnBattery = (ImageView)findViewById(R.id.btnBattery);
-        btnCall = (ImageView)findViewById(R.id.btnCall);
+
+        address = newint.getStringExtra("kadir");
+        btnWp = findViewById(R.id.btnWp);
+        btnSms = findViewById(R.id.btnSms);
+        btnArW = findViewById(R.id.btnAw);
+        btnBt = findViewById(R.id.btnBt);
+        btnBattery = findViewById(R.id.btnBattery);
+        btnCall = findViewById(R.id.btnCall);
+
+        Toast.makeText(getApplicationContext(), "Adresim: " + address, Toast.LENGTH_SHORT).show();
+
         new BtConnect().execute();
+
         btnCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!callEnable){
+                if (!callEnable) {
                     btnCall.setImageResource(R.drawable.call_on);
                     callEnable = true;
                     messages("Arama bildirimleri açık.");
-                }else if (callEnable){
+                } else if (callEnable) {
                     btnCall.setImageResource(R.drawable.call_off);
                     callEnable = false;
                     messages("Arama bildirimleri kapalı.");
                 }
             }
         });
+
         btnWp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,13 +77,14 @@ public class MainActivity extends AppCompatActivity {
                     wpEnable = false;
                     messages("Whatsapp bildirimleri kapalı.");
                 }
-                else if (!wpEnable){
+                else if (!wpEnable) {
                     btnWp.setImageResource(R.drawable.wp_on);
                     wpEnable = true;
                     messages("Whatsapp bildirimleri açık.");
                 }
             }
         });
+
         btnArW.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,26 +94,26 @@ public class MainActivity extends AppCompatActivity {
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(now);
                     String dateData = "0:";
-                    int hours,minutes,seconds,day,month,year,dayN;
+                    int hours, minutes, seconds, day, month, year, dayN;
                     hours = calendar.get(Calendar.HOUR_OF_DAY);
-                    if (hours < 10) dateData += "0"+hours+":";
-                    else dateData += hours+":";
+                    if (hours < 10) dateData += "0" + hours + ":";
+                    else dateData += hours + ":";
                     minutes = calendar.get(Calendar.MINUTE);
-                    if (minutes<10) dateData +="0"+minutes+":";
-                    else dateData+= minutes+":";
+                    if (minutes < 10) dateData += "0" + minutes + ":";
+                    else dateData += minutes + ":";
                     seconds = calendar.get(Calendar.SECOND);
-                    if (seconds<10) dateData+="0"+seconds+":";
-                    else dateData+= seconds+":";
+                    if (seconds < 10) dateData += "0" + seconds + ":";
+                    else dateData += seconds + ":";
                     day = calendar.get(Calendar.DAY_OF_MONTH);
-                    if (day<10) dateData+="0"+day+":";
-                    else dateData+=day+":";
+                    if (day < 10) dateData +="0" + day + ":";
+                    else dateData += day + ":";
                     month = calendar.get(Calendar.MONTH);
-                    month+=1;
-                    if (month<10) dateData+="0"+month+":";
-                    else dateData += month+":";
+                    month += 1;
+                    if (month < 10) dateData += "0" + month + ":";
+                    else dateData += month + ":";
                     year = calendar.get(Calendar.YEAR);
                     dayN = calendar.get(Calendar.DAY_OF_WEEK);
-                    dateData+=year+":"+dayN;
+                    dateData += year + ":" + dayN;
                     messages(dateData);
                     sendData(dateData,"Tarih ve saat bilgileri aktarıldı.");
                 }catch (Exception e){
@@ -113,14 +121,15 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
         btnSms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*if (!smsEnable){
+                /*if (!smsEnable) {
                     btnSms.setImageResource(R.drawable.sms_on);
                     smsEnable = true;
                     messages("SMS bildirimleri açık");
-                }else if (smsEnable){
+                } else if (smsEnable) {
                     btnSms.setImageResource(R.drawable.sms_off);
                     smsEnable = false;
                     messages("SMS bildirimleri kapalı.");
@@ -128,39 +137,42 @@ public class MainActivity extends AppCompatActivity {
                 sendData("Merhaba Dunya","Gönderildi");
             }
         });
+
         btnBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent openBtList = new Intent(getApplicationContext(),BluetoothDeviceListActivity.class);
+                Intent openBtList = new Intent(getApplicationContext(), BluetoothDeviceListActivity.class);
                 startActivity(openBtList);
             }
         });
+
         btnBattery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!batteryEnable){
+                if (!batteryEnable) {
                     btnBattery.setImageResource(R.drawable.battery_on);
                     batteryEnable = true;
                     IntentFilter batteryLevel = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-                    registerReceiver(receiverBattery,batteryLevel);
-                }else if (batteryEnable){
+                    registerReceiver(receiverBattery, batteryLevel);
+                }else if (batteryEnable) {
                     btnBattery.setImageResource(R.drawable.battery_off);
                     batteryEnable = false;
                 }
             }
         });
     }
-    private class BtConnect extends AsyncTask<Void,Void,Void>{
-        private boolean connectedSucces = true;
+
+    private class BtConnect extends AsyncTask<Void,Void,Void> {
+        private boolean connectedSuccess = true;
         MainActivity main = new MainActivity();
         @Override
-        protected void onPreExecute(){
+        protected void onPreExecute() {
             progress = ProgressDialog.show(MainActivity.this,"Bağlanıyor...","Lütfen bekleyiniz...");
         }
         @Override
-        protected Void doInBackground(Void...devices){
+        protected Void doInBackground(Void...devices) {
             try {
-                if (btSocket==null || !isBtConnected){
+                if (btSocket==null || !isBtConnected) {
                     main.myBluetooth = BluetoothAdapter.getDefaultAdapter();
                     BluetoothDevice device = main.myBluetooth.getRemoteDevice(address);
                     main.btSocket = device.createInsecureRfcommSocketToServiceRecord(myUUID);
@@ -168,14 +180,14 @@ public class MainActivity extends AppCompatActivity {
                     main.btSocket.connect();
                 }
             }catch (IOException e){
-                connectedSucces = false;
+                connectedSuccess = false;
             }
             return null;
         }
         @Override
-        protected void onPostExecute(Void result){
+        protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            if (!connectedSucces){
+            if (!connectedSuccess) {
                 messages("Bağlantı hatası, lütfen tekrar deneyiniz.");
                 finish();
             }else{
@@ -185,28 +197,32 @@ public class MainActivity extends AppCompatActivity {
             progress.dismiss();
         }
     }
-    private void Disconnect(){
-        if (btSocket!=null);
+
+    private void Disconnect() {
+        if (btSocket != null);
         try {
             btSocket.close();
-        }catch (IOException e){
+        }catch (IOException e) {
             messages("Hata!");
         }
         finish();
     }
-    public void sendData(String data,String notification){
-        if (btSocket!=null){
+
+    public void sendData(String data, String notification) {
+        if (btSocket != null) {
             try {
                 btSocket.getOutputStream().write(data.toString().getBytes());
                 messages(notification);
-            }catch (IOException e) {
+            } catch (IOException e) {
                 messages("Hata!");
             }
         }
     }
-    public void messages(String s){
-        Toast.makeText(getApplicationContext(),s, Toast.LENGTH_LONG).show();
+
+    public void messages(String s) {
+        Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
     }
+
     private BroadcastReceiver receiverBattery = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -214,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
             MainActivity main = new MainActivity();
             boolean batteryController;
             batteryController = main.batteryEnable;
-            if (level <= 100 && batteryController == true){
+            if (level <= 100 && batteryController == true) {
                 main.sendData("2","Pil bilgileri gönderildi.");
             }
         }
