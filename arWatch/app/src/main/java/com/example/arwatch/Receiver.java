@@ -14,7 +14,7 @@ public class Receiver extends BroadcastReceiver {
         final MainActivity main = new MainActivity();
         if (bundle!=null){
             Object[] pdus = (Object[])bundle.get("pdus");
-            for (int i=0;i<pdus.length;i++){
+            for (int i = 0; i < pdus.length; i++) {
                 SmsMessage messages = SmsMessage.createFromPdu((byte[])pdus[i]);
                 String number = messages.getDisplayOriginatingAddress();
                 String msg = messages.getDisplayMessageBody();

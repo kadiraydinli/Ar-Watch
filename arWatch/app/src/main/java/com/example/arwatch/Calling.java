@@ -12,7 +12,7 @@ public class Calling extends BroadcastReceiver {
         MainActivity main = new MainActivity();
         if(intent.getStringExtra(TelephonyManager.EXTRA_STATE).equals(TelephonyManager.EXTRA_STATE_RINGING)){
             String inComingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
-            main.messages("Arayan Kişi: "+inComingNumber);
+            main.messages("Arayan Kişi: " + inComingNumber);
         }
         else if(intent.getStringExtra(TelephonyManager.EXTRA_STATE).equals(TelephonyManager.EXTRA_STATE_IDLE) || intent.getStringExtra(TelephonyManager.EXTRA_STATE).equals(TelephonyManager.EXTRA_STATE_OFFHOOK)){
             main.messages("Arama Bekleniyor.");
