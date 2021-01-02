@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
+
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     public BluetoothSocket btSocket = null;
     public boolean isBtConnected = false;
     static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,8 +75,7 @@ public class MainActivity extends AppCompatActivity {
                     btnWp.setImageResource(R.drawable.wp_off);
                     wpEnable = false;
                     messages("Whatsapp bildirimleri kapalı.");
-                }
-                else if (!wpEnable) {
+                } else if (!wpEnable) {
                     btnWp.setImageResource(R.drawable.wp_on);
                     wpEnable = true;
                     messages("Whatsapp bildirimleri açık.");
@@ -102,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
                     if (seconds < 10) dateData += "0" + seconds + ":";
                     else dateData += seconds + ":";
                     day = calendar.get(Calendar.DAY_OF_MONTH);
-                    if (day < 10) dateData +="0" + day + ":";
+                    if (day < 10) dateData += "0" + day + ":";
                     else dateData += day + ":";
                     month = calendar.get(Calendar.MONTH);
                     month += 1;
@@ -112,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                     dayN = calendar.get(Calendar.DAY_OF_WEEK);
                     dateData += year + ":" + dayN;
                     messages(dateData);
-                    sendData(dateData,"Tarih ve saat bilgileri aktarıldı.");
+                    sendData(dateData, "Tarih ve saat bilgileri aktarıldı.");
                 } catch (Exception e) {
                     messages("Tarih ve saat aktarılamadı.");
                 }
@@ -122,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
         btnSms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*if (!smsEnable) {
+                if (!smsEnable) {
                     btnSms.setImageResource(R.drawable.sms_on);
                     smsEnable = true;
                     messages("SMS bildirimleri açık");
@@ -130,8 +131,7 @@ public class MainActivity extends AppCompatActivity {
                     btnSms.setImageResource(R.drawable.sms_off);
                     smsEnable = false;
                     messages("SMS bildirimleri kapalı.");
-                }*/
-                sendData("Merhaba Dunya","Gönderildi");
+                }
             }
         });
 
@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
                     batteryEnable = true;
                     IntentFilter batteryLevel = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
                     registerReceiver(receiverBattery, batteryLevel);
-                }else if (batteryEnable) {
+                } else if (batteryEnable) {
                     btnBattery.setImageResource(R.drawable.battery_off);
                     batteryEnable = false;
                 }
@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            progress = ProgressDialog.show(MainActivity.this,"Bağlanıyor...","Lütfen bekleyiniz...");
+            progress = ProgressDialog.show(MainActivity.this, "Bağlanıyor...", "Lütfen bekleyiniz...");
         }
 
         @Override
@@ -199,10 +199,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void Disconnect() {
-        if (btSocket != null);
+        if (btSocket != null) ;
         try {
             btSocket.close();
-        }catch (IOException e) {
+        } catch (IOException e) {
             messages("Hata!");
         }
         finish();
@@ -226,12 +226,12 @@ public class MainActivity extends AppCompatActivity {
     private BroadcastReceiver receiverBattery = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL,-1);
+            int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
             MainActivity main = new MainActivity();
             boolean batteryController;
             batteryController = main.batteryEnable;
             if (level <= 100 && batteryController == true) {
-                main.sendData("2","Pil bilgileri gönderildi.");
+                main.sendData("2", "Pil bilgileri gönderildi.");
             }
         }
     };

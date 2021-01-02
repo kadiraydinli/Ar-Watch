@@ -12,13 +12,15 @@ public class Receiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Bundle bundle = intent.getExtras();
         final MainActivity main = new MainActivity();
-        if (bundle!=null){
-            Object[] pdus = (Object[])bundle.get("pdus");
+
+        if (bundle != null) {
+            Object[] pdus = (Object[]) bundle.get("pdus");
+
             for (int i = 0; i < pdus.length; i++) {
-                SmsMessage messages = SmsMessage.createFromPdu((byte[])pdus[i]);
+                SmsMessage messages = SmsMessage.createFromPdu((byte[]) pdus[i]);
                 String number = messages.getDisplayOriginatingAddress();
                 String msg = messages.getDisplayMessageBody();
-                main.sendData(msg,"Mesaj Gönderildi!");
+                main.sendData(msg, "Mesaj Gönderildi!");
             }
         }
     }

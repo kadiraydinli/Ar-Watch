@@ -31,12 +31,11 @@ public class BluetoothDeviceListActivity extends AppCompatActivity {
         myBluetooth = BluetoothAdapter.getDefaultAdapter();
 
         if (myBluetooth == null) {
-            Toast.makeText(getApplicationContext(),"Cihazınız bluetooth desteklememektedir.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Cihazınız bluetooth desteklememektedir.", Toast.LENGTH_LONG).show();
             finish();
-        }
-        else if (!myBluetooth.isEnabled()) {
+        } else if (!myBluetooth.isEnabled()) {
             Intent btOpen = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(btOpen,1);
+            startActivityForResult(btOpen, 1);
         }
         showBondedDevice();
     }
@@ -45,13 +44,13 @@ public class BluetoothDeviceListActivity extends AppCompatActivity {
         bondedDevice = myBluetooth.getBondedDevices();
         ArrayList list = new ArrayList();
         if (bondedDevice.size() > 0) {
-            for(BluetoothDevice bt: bondedDevice) {
+            for (BluetoothDevice bt : bondedDevice) {
                 list.add(bt.getName() + "\n" + bt.getAddress());
             }
         } else {
-            Toast.makeText(getApplicationContext(),"Eşlenmiş cihaz bulunamadı.",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Eşlenmiş cihaz bulunamadı.", Toast.LENGTH_LONG).show();
         }
-        final ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_activated_1, list);
+        final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_activated_1, list);
         deviceList.setAdapter(adapter);
         deviceList.setOnItemClickListener(selectDevice);
     }
@@ -59,7 +58,7 @@ public class BluetoothDeviceListActivity extends AppCompatActivity {
     private AdapterView.OnItemClickListener selectDevice = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            String info = ((TextView)view).getText().toString();
+            String info = ((TextView) view).getText().toString();
             String address = info.substring(info.length() - 17);
             Intent returnMainActivity = new Intent(BluetoothDeviceListActivity.this, MainActivity.class);
             returnMainActivity.putExtra(EXTRA_ADDRESS, address);
