@@ -33,7 +33,7 @@ void setup() {
 void loop() {
   boolean haveData = false;
   haveData = bluetoothDataControl();
-  if(isItTime == true)
+  if (isItTime == true)
   {
     current = millis();
     timeDateScreen(current);
@@ -42,7 +42,7 @@ void loop() {
   {
     display.clearDisplay();
     display.setTextColor(WHITE);
-    display.setCursor(5,25);
+    display.setCursor(5, 25);
     display.setTextSize(1);
     display.print("Telefon Ile Baglanti        Kurun!");
     display.display();
@@ -53,18 +53,18 @@ void timeRegulation()
 {
   display.display();
   delay(5000);
-  if(second == 59) second = 4;
-  if(second == 58) second = 3;
-  if(second == 57) second = 2;
-  if(second == 56) second = 1;
-  if(second == 55) second = 0;
+  if (second == 59) second = 4;
+  if (second == 58) second = 3;
+  if (second == 57) second = 2;
+  if (second == 56) second = 1;
+  if (second == 55) second = 0;
 }
 
 void screenWrite(String data)
 {
   display.clearDisplay();
   display.setTextColor(WHITE);
-  if(data.substring(0,1) == "0") //Saat
+  if (data.substring(0, 1) == "0") //Saat
   {
     hour = data.substring(2, 5).toInt();
     minute = data.substring(5, 8).toInt();
@@ -75,34 +75,34 @@ void screenWrite(String data)
     dayW = data.substring(22, 24).toInt() - 1;
     isItTime = true;
   }
-  
-  if(data.substring(0,1) == "1") //SMS
+
+  if (data.substring(0, 1) == "1") //SMS
   {
     display.drawBitmap(0, 0, SMS, 24, 24, WHITE);
     display.setTextColor(WHITE);
     display.setTextSize(2);
-    display.setCursor(35,5);
-    display.println(data.substring(data.indexOf("<no>")+4, data.indexOf("</no>")));
+    display.setCursor(35, 5);
+    display.println(data.substring(data.indexOf("<no>") + 4, data.indexOf("</no>")));
     display.setTextSize(1);
-    display.setCursor(0,30);
-    display.println(data.substring(data.indexOf("<msg>")+5, data.indexOf("</msg>")));
+    display.setCursor(0, 30);
+    display.println(data.substring(data.indexOf("<msg>") + 5, data.indexOf("</msg>")));
     timeRegulation();
   }
-  
+
   /*if(data.substring(0,1) == "2") //Pil Durumu
-  {
+    {
     display.drawBitmap(0, 0, phoneLowBattery, 128, 60, WHITE);
     display.display();
-  }*/
+    }*/
 
-  if(data.substring(0,1) == "3") //Çağrı Bilgisi
+  if (data.substring(0, 1) == "3") //Çağrı Bilgisi
   {
     display.clearDisplay();
     display.drawBitmap(0, 0, call, 48, 48, WHITE);
     display.setTextColor(WHITE);
     display.setTextSize(2);
-    display.setCursor(60,20);
-    display.println(data.substring(data.indexOf("<no>")+4, data.indexOf("</no>")));
+    display.setCursor(60, 20);
+    display.println(data.substring(data.indexOf("<no>") + 4, data.indexOf("</no>")));
     display.display();
     timeRegulation();
   }
@@ -111,40 +111,40 @@ void screenWrite(String data)
 boolean bluetoothDataControl()
 {
   int isTransactionEnded = false;
-  while(!isTransactionEnded)
+  while (!isTransactionEnded)
   {
-    if(Serial.available())
+    if (Serial.available())
     {
       incomingData = Serial.readString();
       screenWrite(incomingData);
     }
     else isTransactionEnded = true;
   }
-  return true; 
+  return true;
 }
 
 void reelTime()
 {
   second++;
-  if(second > 59) //second
+  if (second > 59) //second
   {
     second = 0;
     minute++;
-    if(minute > 59) //minute
+    if (minute > 59) //minute
     {
       minute = 0;
       hour++;
-      if(hour == 24) //hour
+      if (hour == 24) //hour
       {
         hour = 0;
         dayW++;
         day++;
-        if(dayW == 8) dayW = 1;
-        if(day > monthD[byte(month)])
+        if (dayW == 8) dayW = 1;
+        if (day > monthD[byte(month)])
         {
           month++;
           day = 1;
-          if(month > 12)
+          if (month > 12)
           {
             month = 1;
             year++;
@@ -157,27 +157,27 @@ void reelTime()
 
 void timeDateScreen(unsigned long current)
 {
-  if(current - before > 1000)
+  if (current - before > 1000)
   {
     display.clearDisplay();
     display.setTextColor(WHITE);
-    if(hour < 10)
+    if (hour < 10)
     {
-      display.setCursor(21,20);
+      display.setCursor(21, 20);
       display.setTextSize(3);
       display.print("0" + String(hour));
     }
     else
     {
-      display.setCursor(21,20);
+      display.setCursor(21, 20);
       display.setTextSize(3);
       display.print(String(hour));
     }
-    if(minute < 10)
+    if (minute < 10)
     {
-      display.setCursor(56,20);
+      display.setCursor(56, 20);
       display.setTextSize(3);
-      if(liveB == false)
+      if (liveB == false)
       {
         display.print(":0" + String(minute));
         liveB = true;
@@ -190,9 +190,9 @@ void timeDateScreen(unsigned long current)
     }
     else
     {
-      display.setCursor(56,20);
+      display.setCursor(56, 20);
       display.setTextSize(3);
-      if(liveB == false)
+      if (liveB == false)
       {
         display.print(":" + String(minute));
         liveB = true;
@@ -204,35 +204,35 @@ void timeDateScreen(unsigned long current)
       }
     }
     /*if(second < 10)
-    {
+      {
       display.setCursor(0,0);
       display.setTextSize(1);
       display.print("0" + String(second));
-    }
-    else
-    {
+      }
+      else
+      {
       display.setCursor(0,0);
       display.setTextSize(1);
       display.print(String(second));
-    }*/
+      }*/
     display.setTextSize(1);
     display.setTextColor(WHITE);
-    if(day<10)
+    if (day < 10)
       date = "0" + String(day) + "." + String(month) + "." + String(year) + " " + String(week[dayW]);
-    if(month<10)
+    if (month < 10)
       date = String(day) + ".0" + String(month) + "." + String(year) + " " + String(week[dayW]);
-    if(day < 10 && month < 10)
-      date = "0"+ String(day) + ".0" + String(month) + "." + String(year) + " " + String(week[dayW]);
-    if(day >= 10 && month >= 10)
+    if (day < 10 && month < 10)
+      date = "0" + String(day) + ".0" + String(month) + "." + String(year) + " " + String(week[dayW]);
+    if (day >= 10 && month >= 10)
       date = String(day) + "." + String(month) + "." + String(year) + " " + String(week[dayW]);
     //Serial.println(date);
-    if(date.length() == 15) //Salı - Cuma
+    if (date.length() == 15) //Salı - Cuma
       display.setCursor(19, 57);
-    else if(date.length() == 19) //Çarşamba - Perşembe
+    else if (date.length() == 19) //Çarşamba - Perşembe
       display.setCursor(7, 57);
-    else if(date.length() == 20) //Pazartesi - Cumartesi
+    else if (date.length() == 20) //Pazartesi - Cumartesi
       display.setCursor(4, 57);
-    else if(date.length() == 16) //Pazar
+    else if (date.length() == 16) //Pazar
       display.setCursor(16, 57);
     display.print(date);
     //display.drawBitmap(104, 0, battery, 24, 24, WHITE);
