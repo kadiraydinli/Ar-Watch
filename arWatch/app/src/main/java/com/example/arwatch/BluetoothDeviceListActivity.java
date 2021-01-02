@@ -45,7 +45,7 @@ public class BluetoothDeviceListActivity extends AppCompatActivity {
         bondedDevice = myBluetooth.getBondedDevices();
         ArrayList list = new ArrayList();
         if (bondedDevice.size() > 0) {
-            for(BluetoothDevice bt: bondedDevice){
+            for(BluetoothDevice bt: bondedDevice) {
                 list.add(bt.getName() + "\n" + bt.getAddress());
             }
         } else {
@@ -62,7 +62,7 @@ public class BluetoothDeviceListActivity extends AppCompatActivity {
             String info = ((TextView)view).getText().toString();
             String address = info.substring(info.length() - 17);
             Intent returnMainActivity = new Intent(BluetoothDeviceListActivity.this, MainActivity.class);
-            returnMainActivity.putExtra("blueAddress", address);
+            returnMainActivity.putExtra(EXTRA_ADDRESS, address);
             startActivity(returnMainActivity);
         }
     };

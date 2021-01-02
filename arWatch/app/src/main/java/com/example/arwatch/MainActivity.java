@@ -12,6 +12,7 @@ import android.os.AsyncTask;
 import android.os.BatteryManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -24,6 +25,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
+import static com.example.arwatch.BluetoothDeviceListActivity.EXTRA_ADDRESS;
+
 public class MainActivity extends AppCompatActivity {
     ImageView btnWp, btnSms, btnArW, btnBt, btnBattery, btnCall;
     boolean wpEnable = false, batteryEnable = false, callEnable = false;
@@ -33,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     public BluetoothAdapter myBluetooth = null;
     public BluetoothSocket btSocket = null;
     public boolean isBtConnected = false;
-    static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent blueAddress = getIntent();
 
-        address = blueAddress.getStringExtra("blueAddress");
+        address = blueAddress.getStringExtra(EXTRA_ADDRESS);
         btnWp = findViewById(R.id.btnWp);
         btnSms = findViewById(R.id.btnSms);
         btnArW = findViewById(R.id.btnAw);
@@ -113,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
                     dateData += year + ":" + dayN;
                     messages(dateData);
                     sendData(dateData,"Tarih ve saat bilgileri aktarıldı.");
-                }catch (Exception e){
+                } catch (Exception e) {
                     messages("Tarih ve saat aktarılamadı.");
                 }
             }
@@ -161,7 +164,6 @@ public class MainActivity extends AppCompatActivity {
 
     private class BtConnect extends AsyncTask<Void, Void, Void> {
         private boolean connectedSuccess = true;
-        MainActivity main = new MainActivity();
 
         @Override
         protected void onPreExecute() {
@@ -169,14 +171,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected Void doInBackground(Void...devices) {
+        protected Void doInBackground(Void... devices) {
             try {
                 if (btSocket == null || !isBtConnected) {
-                    main.myBluetooth = BluetoothAdapter.getDefaultAdapter();
-                    BluetoothDevice device = main.myBluetooth.getRemoteDevice(address);
-                    main.btSocket = device.createInsecureRfcommSocketToServiceRecord(myUUID);
+                    myBluetooth = BluetoothAdapter.getDefaultAdapter();
+                    BluetoothDevice device = myBluetooth.getRemoteDevice(address);
+                    btSocket = device.createInsecureRfcommSocketToServiceRecord(MY_UUID);
                     BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
-                    main.btSocket.connect();
+                    btSocket.connect();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -212,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
     public void sendData(String data, String notification) {
         if (btSocket != null) {
             try {
-                btSocket.getOutputStream().write(data.toString().getBytes());
+                btSocket.getOutputStream().write(data.getBytes());
                 messages(notification);
             } catch (IOException e) {
                 messages("Hata!");
